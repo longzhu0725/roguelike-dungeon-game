@@ -282,6 +282,63 @@ WeaponPresets = {
 }
 ```
 
+**武器模块系统**:
+
+武器支持模块改造，每把武器有 2 个模块槽位，可通过模块修改属性。
+
+```javascript
+// 模块预设
+const WeaponModulePresets = {
+    RAPID_COIL: {           // 快速线圈
+        name: '快速线圈',
+        rarity: 'common',
+        add: { fireRate: -80, spread: 2 },
+        recommend: ['手枪', '机枪', '激光枪']
+    },
+    HEAVY_CALIBER: {        // 大口径
+        name: '大口径',
+        rarity: 'rare',
+        add: { damage: 8, projectileSize: 2, fireRate: 120 },
+        recommend: ['狙击枪', '霰弹枪']
+    },
+    SPLIT_CHAMBER: {        // 分裂膛室
+        name: '分裂膛室',
+        rarity: 'rare',
+        add: { projectileCount: 2, spread: 8, fireRate: 150 },
+        recommend: ['霰弹枪', '机枪']
+    },
+    PIERCING_CORE: {        // 穿透核心
+        name: '穿透核心',
+        rarity: 'common',
+        set: { piercing: true },
+        recommend: ['狙击枪', '激光枪']
+    },
+    LONG_BARREL: {          // 加长枪管
+        name: '加长枪管',
+        rarity: 'common',
+        add: { range: 300, projectileSpeed: 200 },
+        recommend: ['狙击枪', '手枪']
+    }
+};
+
+// 应用模块
+const weapon = new Weapon(scene, WeaponPresets.PISTOL);
+weapon.applyModule('RAPID_COIL');      // 使用预设ID
+weapon.applyModule(WeaponModulePresets.HEAVY_CALIBER);  // 直接使用模块对象
+
+// 移除模块
+weapon.removeModule('RAPID_COIL');
+
+// 清空所有模块
+weapon.clearModules();
+```
+
+**模块属性规则**:
+- `add`: 加法修改（如 fireRate: -80 表示射速加快80ms）
+- `mul`: 乘法修改（如 damage: 1.5 表示伤害增加50%）
+- `set`: 直接设置（如 piercing: true 直接设置穿透属性）
+- `apply`: 自定义函数钩子
+
 **扩展指南**:
 ```javascript
 // 添加新武器
@@ -297,6 +354,16 @@ ROCKET_LAUNCHER: {
     projectileCount: 1,
     explosive: true,        // 爆炸效果
     explosionRadius: 100
+}
+
+// 添加新模块
+EXPLOSIVE_TIP: {
+    id: 'EXPLOSIVE_TIP',
+    name: '爆炸弹头',
+    rarity: 'legend',
+    set: { explosive: true, explosionRadius: 80 },
+    add: { damage: -20 },
+    recommend: ['狙击枪', '手枪']
 }
 ```
 
@@ -692,6 +759,10 @@ debugPrint() {
   - 烟雾拖尾视觉效果
 - ✅ 6种武器系统（原5种+火箭筒）
 - ✅ 武器切换支持数字键1-6
+- ✅ 武器模块系统
+  - 5种模块预设（快速线圈、大口径、分裂膛室、穿透核心、加长枪管）
+  - 模块槽位机制
+  - 属性叠加/乘法/设置规则
 
 ### v1.0.0 
 - ✅ 基础游戏框架
